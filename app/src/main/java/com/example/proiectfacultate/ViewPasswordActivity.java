@@ -23,7 +23,7 @@ public class ViewPasswordActivity extends AppCompatActivity {
 
     private String userName, password;
 
-    private TextView passName,passValue, passEdit, passTitle,passEmpty;
+    private TextView passName,passValue, passEdit, passTitle,passEmpty,passCopy;
 
     private Button deletePass,savePass,generatePass;
 
@@ -46,6 +46,7 @@ public class ViewPasswordActivity extends AppCompatActivity {
         generatePass = findViewById(R.id.generateUpdatePass);
         updatedPassword = findViewById(R.id.updatedPassword);
         passEmpty = findViewById(R.id.passwordEmptyError);
+        passCopy = findViewById(R.id.CopyPasswordViewPass);
 
         HashMap<String, String> receivedDataMap = (HashMap<String, String>) getIntent().getSerializableExtra("data");
 
@@ -71,6 +72,7 @@ public class ViewPasswordActivity extends AppCompatActivity {
 
         passEdit.setOnClickListener(view -> {
             passTitle.setText("Type the new pass: ");
+            passCopy.setVisibility(View.GONE);
             passEdit.setVisibility(View.GONE);
             passValue.setVisibility(View.GONE);
             savePass.setVisibility(View.VISIBLE);
