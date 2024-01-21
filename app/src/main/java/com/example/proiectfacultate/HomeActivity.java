@@ -22,7 +22,7 @@ import java.util.Objects;
 public class HomeActivity extends AppCompatActivity {
 
     private String userName, password;
-    private Button addPasswordButton;
+    private Button addPasswordButton,logOutButton;
 
     private DBHelper dbHelper;
 
@@ -41,6 +41,12 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         addPasswordButton = findViewById(R.id.buttonAddPassword);
+        logOutButton = findViewById(R.id.buttonLogOut);
+
+        logOutButton.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+        });
 
 
         addPasswordButton.setOnClickListener(view -> {
