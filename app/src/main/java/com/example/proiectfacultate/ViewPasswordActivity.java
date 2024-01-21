@@ -25,7 +25,7 @@ public class ViewPasswordActivity extends AppCompatActivity {
 
     private TextView passName,passValue, passEdit, passTitle,passEmpty,passCopy;
 
-    private Button deletePass,savePass,generatePass,homePageButton;
+    private Button deletePass,savePass,generatePass,homePageButton,stopEditButton;
 
     private EditText updatedPassword;
     private DBHelper DB;
@@ -48,6 +48,7 @@ public class ViewPasswordActivity extends AppCompatActivity {
         passEmpty = findViewById(R.id.passwordEmptyError);
         passCopy = findViewById(R.id.CopyPasswordViewPass);
         homePageButton = findViewById(R.id.buttonHomePage);
+        stopEditButton = findViewById(R.id.buttonStopEditing);
 
         HashMap<String, String> receivedDataMap = (HashMap<String, String>) getIntent().getSerializableExtra("data");
 
@@ -79,6 +80,8 @@ public class ViewPasswordActivity extends AppCompatActivity {
             savePass.setVisibility(View.VISIBLE);
             generatePass.setVisibility(View.VISIBLE);
             updatedPassword.setVisibility(View.VISIBLE);
+            stopEditButton.setVisibility(View.VISIBLE);
+            updatedPassword.setText(pass);
         });
 
         generatePass.setOnClickListener(view -> {
@@ -115,6 +118,17 @@ public class ViewPasswordActivity extends AppCompatActivity {
             Intent intent = new Intent(ViewPasswordActivity.this,HomeActivity.class);
             intent.putExtra("data",receivedDataMap);
             startActivity(intent);
+        });
+
+        stopEditButton.setOnClickListener(view -> {
+            passTitle.setText("Password: ");
+            passCopy.setVisibility(View.VISIBLE);
+            passEdit.setVisibility(View.VISIBLE);
+            passValue.setVisibility(View.VISIBLE);
+            savePass.setVisibility(View.GONE);
+            generatePass.setVisibility(View.GONE);
+            updatedPassword.setVisibility(View.GONE);
+            stopEditButton.setVisibility(View.GONE);
         });
 
 
