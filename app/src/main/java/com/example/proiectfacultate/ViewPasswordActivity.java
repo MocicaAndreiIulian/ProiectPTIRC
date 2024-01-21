@@ -25,7 +25,7 @@ public class ViewPasswordActivity extends AppCompatActivity {
 
     private TextView passName,passValue, passEdit, passTitle,passEmpty,passCopy;
 
-    private Button deletePass,savePass,generatePass;
+    private Button deletePass,savePass,generatePass,homePageButton;
 
     private EditText updatedPassword;
     private DBHelper DB;
@@ -47,6 +47,7 @@ public class ViewPasswordActivity extends AppCompatActivity {
         updatedPassword = findViewById(R.id.updatedPassword);
         passEmpty = findViewById(R.id.passwordEmptyError);
         passCopy = findViewById(R.id.CopyPasswordViewPass);
+        homePageButton = findViewById(R.id.buttonHomePage);
 
         HashMap<String, String> receivedDataMap = (HashMap<String, String>) getIntent().getSerializableExtra("data");
 
@@ -108,6 +109,12 @@ public class ViewPasswordActivity extends AppCompatActivity {
             intent.putExtra("data",receivedDataMap);
             startActivity(intent);
             Toast.makeText(ViewPasswordActivity.this, "Password Updated", Toast.LENGTH_SHORT).show();
+        });
+
+        homePageButton.setOnClickListener(view -> {
+            Intent intent = new Intent(ViewPasswordActivity.this,HomeActivity.class);
+            intent.putExtra("data",receivedDataMap);
+            startActivity(intent);
         });
 
 
