@@ -2,9 +2,11 @@ package com.example.proiectfacultate;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -30,6 +32,8 @@ public class ViewPasswordActivity extends AppCompatActivity {
     private EditText updatedPassword;
     private DBHelper DB;
 
+    HashMap<String, String> data;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,27 +54,27 @@ public class ViewPasswordActivity extends AppCompatActivity {
         homePageButton = findViewById(R.id.buttonHomePage);
         stopEditButton = findViewById(R.id.buttonStopEditing);
 
-        HashMap<String, String> receivedDataMap = (HashMap<String, String>) getIntent().getSerializableExtra("data");
-
-        if(receivedDataMap == null) {
+        this.data = (HashMap<String, String>) getIntent().getSerializableExtra("data");
+        
+        if(this.data == null) {
             return;
         }
 
-        String passName = receivedDataMap.get("selectedPasswordName");
-        String pass = receivedDataMap.get("selectedPassword");
-        this.userName = receivedDataMap.get("user");
-        this.password = receivedDataMap.get("pass");
+        String passName = this.data.get("selectedPasswordName");
+        String pass = this.data.get("selectedPassword");
+        this.userName = this.data.get("user");
+        this.password = this.data.get("pass");
 
         this.passName.setText(passName);
         this.passValue.setText(pass);
 
-        deletePass.setOnClickListener(view -> {
-            DB.deletePassword(passName,this.userName);
-            Intent intent = new Intent(ViewPasswordActivity.this,HomeActivity.class);
-            intent.putExtra("data",receivedDataMap);
-            startActivity(intent);
-            Toast.makeText(ViewPasswordActivity.this, "Password Deleted", Toast.LENGTH_SHORT).show();
-        });
+//        deletePass.setOnClickListener(view -> {
+//            DB.deletePassword(passName,this.userName);
+//            Intent intent = new Intent(ViewPasswordActivity.this,HomeActivity.class);
+//            intent.putExtra("data",this.data);
+//            startActivity(intent);
+//            Toast.makeText(ViewPasswordActivity.this, "Password Deleted", Toast.LENGTH_SHORT).show();
+//        });
 
         passEdit.setOnClickListener(view -> {
             passTitle.setText("Type the new pass: ");
@@ -109,14 +113,14 @@ public class ViewPasswordActivity extends AppCompatActivity {
             DB.updatePassword(cryptedPass,passName,this.userName);
 
             Intent intent = new Intent(ViewPasswordActivity.this,HomeActivity.class);
-            intent.putExtra("data",receivedDataMap);
+            intent.putExtra("data",this.data);
             startActivity(intent);
             Toast.makeText(ViewPasswordActivity.this, "Password Updated", Toast.LENGTH_SHORT).show();
         });
 
         homePageButton.setOnClickListener(view -> {
             Intent intent = new Intent(ViewPasswordActivity.this,HomeActivity.class);
-            intent.putExtra("data",receivedDataMap);
+            intent.putExtra("data",this.data);
             startActivity(intent);
         });
 
@@ -145,5 +149,20 @@ public class ViewPasswordActivity extends AppCompatActivity {
         clipboardManager.setPrimaryClip(clipData);
 
         Toast.makeText(this, "Text copied to clipboard", Toast.LENGTH_SHORT).show();
+    }
+
+    public void showConfirmationDialog(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirmation")
+                .setMessage("Are you sure you want to delete this password?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    DB.deletePassword(data.get("selectedPasswordName"),userName);
+                    Intent intent = new Intent(ViewPasswordActivity.this,HomeActivity.class);
+                    intent.putExtra("data",data);
+                    startActivity(intent);
+                    Toast.makeText(ViewPasswordActivity.this, "Password Deleted", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("No", (dialog, which) -> {})
+                .show();
     }
 }
