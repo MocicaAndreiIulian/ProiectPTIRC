@@ -65,8 +65,9 @@ public class DBHelper extends SQLiteOpenHelper {
             // Retrieve the value from the "password" column
             passwordValue = cursor.getString(passwordColumnIndex);
             cursor.close();
+            return Hash.verifyPassword(password,passwordValue);
         }
-        return Hash.verifyPassword(password,passwordValue);
+        return false;
     }
 
     public Boolean addPassword(String passwordName,String pass, String userName) {
